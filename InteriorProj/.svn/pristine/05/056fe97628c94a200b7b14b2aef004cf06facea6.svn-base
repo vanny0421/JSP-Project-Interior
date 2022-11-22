@@ -1,0 +1,52 @@
+package com.team.app.consult;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+
+import com.team.action.Action;
+import com.team.action.ActionForward;
+import com.team.app.consult.dao.ConsultDAO;
+import com.team.app.consult.vo.ConsultVO;
+
+public class ConsultOkAction implements Action {
+
+	@Override
+	public ActionForward execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+		req.setCharacterEncoding("UTF-8");
+		resp.setCharacterEncoding("UTF-8");
+		ConsultDAO dao = new ConsultDAO();
+		ConsultVO vo = new ConsultVO();
+		ActionForward forward = new ActionForward();
+
+		System.out.println("컨설트오케이까지 들어옴");
+		// 로그인된 유저 아이디 가져오기? 세션에 담긴 아이디 넘겨받기
+		
+		System.out.println((String)req.getSession().getAttribute("session_id"));
+		vo.setUser_id((String)req.getSession().getAttribute("session_id"));
+		
+		System.out.println(req.getParameter("cns_total_price"));
+		vo.setCns_total_price(req.getParameter("cns_total_price"));
+		
+		System.out.println(req.getParameter("cns_roomType"));
+		vo.setCns_roomType(req.getParameter("cns_roomType"));
+		
+		System.out.println(req.getParameter("cns_square"));
+		vo.setCns_square(Integer.parseInt(req.getParameter("cns_square")));
+		
+		System.out.println(req.getParameter("cns_roomCnt"));
+		vo.setCns_roomCnt(Integer.parseInt(req.getParameter("cns_roomCnt")));
+		
+		System.out.println(req.getParameter("cns_themeSelect"));
+		vo.setCns_themeSelect(req.getParameter("cns_themeSelect"));
+		
+		
+		dao.insertConsult(vo);
+		
+		System.out.println("디비에 담겼음");
+		forward.setRedirect(true);
+		forward.setPath(req.getContextPath()+"/app/main/index.jsp");
+		return forward;
+	}
+
+}
